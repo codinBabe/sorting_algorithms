@@ -6,34 +6,41 @@
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *sorted = NULL;
-	listint_t *current, *next, *temp;
+	listint_t *current, *prev_prev, *prev, *current_1, *current_next;
 
-	if (list == NULL || *list == NULL || (*list)->next == NULL)
+	if (list == NULL)
 		return;
 	current = *list;
-	while (current != NULL)
+
+	while (current)
 	{
-		next = current->next;
-		if (sorted == NULL || current->n <= sorted->n)
+		if (current->prev && current->prev->n > current->n)
 		{
-			current->next = sorted;
-			current->prev = NULL;
-			if (sorted != NULL)
-				sorted->prev = current;
+			/**Store the necessary pointers for swapping**/
+			prev_prev = current->prev->prev;
+			prev = current->prev;
+			current_1 = current;
+			current_next = current->next;
+
+			/**Adjust the pointers to swap the nodes**/
+			prev->next = current_next;
+
+			if (current_next)
+				current_next->prev = prev;
+
+			current_1->prev = prev_prev;
+			current_1->next = prev;
+
+			if (prev_prev)
+				prev_prev->next = current_1;
+			else
+				*list = current_1;
+			prev->prev = current_1;
+			current = *list;
+			print_list(*list);
+			continue; /**Continue to the next iteration**/
 		}
 		else
-		{
-			temp = sorted;
-			while (temp->next != NULL && current->n > temp->next->n)
-				temp = temp->next;
-			current->next = temp->next;
-			if (temp->next != NULL)
-				temp->next->prev = current;
-			temp->next = current;
-			current->prev = temp;
-		}
-		current = next;
+			current = current->next;
 	}
-	*list = sorted;
 }
