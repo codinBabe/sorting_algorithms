@@ -31,7 +31,6 @@ int partion(int *array, size_t size, int lb, int ub)
 		{
 			i++;
 			swap(&array[i], &array[j]);
-			print_array(array, size);
 		}
 	}
 	swap(&array[i + 1], &array[ub]);
