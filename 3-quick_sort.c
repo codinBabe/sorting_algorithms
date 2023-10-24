@@ -13,29 +13,36 @@ void swap(int *a, int *b)
 	*b = temp;
 }
 /**
- * partion - function that sort array in bit
+ * partition - function that sort array in bit
  * @array: array to be sorted
  * @size: size of @array
  * @lb: lower bound
  * @ub: upper bound
  * Return: end of array
  */
-int partion(int *array, size_t size, int lb, int ub)
+int partition(int *array, size_t size, int lb, int ub)
 {
 	int pivot = array[ub];
-	int j, i = lb - 1;
+	int j, i = lb;
 
 	for (j = lb; j <= ub - 1; j++)
 	{
-		if (array[j] <=  pivot)
+		if (array[j] <  pivot)
 		{
+			if (i != j)
+			{
+				swap(&array[i], &array[j]);
+				print_array(array, size);
+			}
 			i++;
-			swap(&array[i], &array[j]);
 		}
 	}
-	swap(&array[i + 1], &array[ub]);
-	print_array(array, size);
-	return (i + 1);
+	if (pivot != array[i])
+	{
+		swap(&array[i], &array[ub]);
+		print_array(array, size);
+	}
+	return (i);
 }
 /**
  * _quick_sort - a function that sorts an array of integers in
@@ -51,7 +58,7 @@ void _quick_sort(int *array, size_t size, int lb, int ub)
 
 	if (lb < ub)
 	{
-		loc = partion(array, size, lb, ub);
+		loc = partition(array, size, lb, ub);
 		_quick_sort(array, size, lb, loc - 1);
 		_quick_sort(array, size, loc + 1, ub);
 	}
